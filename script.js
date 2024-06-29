@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const temperatureLink = document.getElementById('temperature-link');
     const conditionLink = document.getElementById('condition-link');
     const cityNameElement = document.getElementById('city-name');
+    const toggleThemeButton = document.getElementById('toggle-theme');
 
     // Set the city name
     const cityName = "Roseville, CA";
@@ -14,6 +15,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     conditionLink.addEventListener('click', () => {
         fetchWeatherData('weathercode');
+    });
+
+    toggleThemeButton.addEventListener('click', () => {
+        document.body.classList.toggle('night-mode');
     });
 
     function fetchWeatherData(parameter) {
@@ -83,3 +88,4 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initial load
     fetchWeatherData('temperature_2m');
 });
+

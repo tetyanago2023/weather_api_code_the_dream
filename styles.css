@@ -22,10 +22,14 @@ nav ul li {
     margin: 0 1em;
 }
 
-nav ul li a {
-    color: black;
+nav ul li a,
+nav ul li button {
+    color: #B7950B;
     text-decoration: none;
     font-weight: bold;
+    background: none;
+    border: none;
+    cursor: pointer;
 }
 
 main {
@@ -69,4 +73,27 @@ ul li:hover {
 
 ul li i {
     font-size: 1.5em;
+}
+
+/* Night mode styles */
+body.night-mode {
+    background-color: #2e3b4e;
+    color: #cbd2d9;
+}
+
+body.night-mode header {
+    background-color: #1b2836;
+}
+
+body.night-mode ul li {
+    background-color: #3c4b5e;
+    border: 1px solid #4b5c6f;
+}
+
+body.night-mode ul li:nth-child(odd) {
+    background-color: #2e3b4e;
+}
+
+body.night-mode ul li:hover {
+    background-color: #4b5c6f;
 }
