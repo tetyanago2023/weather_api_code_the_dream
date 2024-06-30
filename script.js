@@ -6,9 +6,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const searchButton = document.getElementById('search-button');
     const cityInput = document.getElementById('city-input');
 
-    let currentCity = "Roseville, CA";
-    let currentLatitude = 38.7521;
-    let currentLongitude = -121.2880;
+    let currentCity = "Your Location";
+    let currentLatitude;
+    let currentLongitude;
 
     temperatureLink.addEventListener('click', () => {
         fetchWeatherData(currentLatitude, currentLongitude, 'temperature_2m');
@@ -110,7 +110,26 @@ document.addEventListener('DOMContentLoaded', () => {
         return `<i class="${iconMap[code]}"></i>`;
     }
 
-    // Initial load
-    fetchWeatherData(currentLatitude, currentLongitude, 'temperature_2m');
+    // Initial load using geolocation
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition((position) => {
+            currentLatitude = position.coords.latitude;
+            currentLongitude = position.coords.longitude;
+            fetchWeatherData(currentLatitude, currentLongitude, 'temperature_2m');
+        }, (error) => {
+            console.error('Error getting geolocation:', error);
+            content.innerHTML = '<p>Error getting geolocation. Defaulting to Roseville, CA.</p>';
+            // Default to Roseville, CA
+            currentLatitude = 38.7521;
+            currentLongitude = -121.2880;
+            fetchWeatherData(currentLatitude, currentLongitude, 'temperature_2m');
+        });
+    } else {
+        console.error('Geolocation not supported');
+        content.innerHTML = '<p>Geolocation not supported. Defaulting to Roseville, CA.</p>';
+        // Default to Roseville, CA
+        currentLatitude = 38.7521;
+        currentLongitude = -121.2880;
+        fetchWeatherData(currentLatitude, currentLongitude, 'temperature_2m');
+    }
 });
-
