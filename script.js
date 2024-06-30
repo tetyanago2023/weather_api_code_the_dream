@@ -2,27 +2,52 @@ document.addEventListener('DOMContentLoaded', () => {
     const content = document.getElementById('content');
     const temperatureLink = document.getElementById('temperature-link');
     const conditionLink = document.getElementById('condition-link');
-    const cityNameElement = document.getElementById('city-name');
     const toggleThemeButton = document.getElementById('toggle-theme');
+    const searchButton = document.getElementById('search-button');
+    const cityInput = document.getElementById('city-input');
 
-    // Set the city name
-    const cityName = "Roseville, CA";
-    cityNameElement.textContent = cityName;
+    let currentCity = "Roseville, CA";
+    let currentLatitude = 38.7521;
+    let currentLongitude = -121.2880;
 
     temperatureLink.addEventListener('click', () => {
-        fetchWeatherData('temperature_2m');
+        fetchWeatherData(currentLatitude, currentLongitude, 'temperature_2m');
     });
 
     conditionLink.addEventListener('click', () => {
-        fetchWeatherData('weathercode');
+        fetchWeatherData(currentLatitude, currentLongitude, 'weathercode');
     });
 
     toggleThemeButton.addEventListener('click', () => {
         document.body.classList.toggle('night-mode');
     });
 
-    function fetchWeatherData(parameter) {
-        const apiUrl = `https://api.open-meteo.com/v1/forecast?latitude=38.7521&longitude=-121.2880&hourly=${parameter}`;
+    searchButton.addEventListener('click', () => {
+        const city = cityInput.value;
+        if (city) {
+            fetchCoordinates(city);
+        }
+    });
+
+    function fetchCoordinates(city) {
+        const apiUrl = `https://api.open-meteo.com/v1/forecast?latitude=35.6895&longitude=139.6917&current_weather=true`;
+
+        fetch(apiUrl)
+            .then(response => response.json())
+            .then(data => {
+                currentCity = city;
+                currentLatitude = data.latitude;
+                currentLongitude = data.longitude;
+                fetchWeatherData(currentLatitude, currentLongitude, 'temperature_2m');
+            })
+            .catch(error => {
+                console.error('Error fetching coordinates:', error);
+                content.innerHTML = '<p>Error fetching coordinates.</p>';
+            });
+    }
+
+    function fetchWeatherData(latitude, longitude, parameter) {
+        const apiUrl = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&hourly=${parameter}`;
 
         fetch(apiUrl)
             .then(response => response.json())
@@ -36,7 +61,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function displayData(data, parameter) {
-        let contentHtml = `<h2>${parameter === 'temperature_2m' ? 'Temperature' : 'Weather Condition'} in ${cityName}</h2>`;
+        let contentHtml = `<h2>${parameter === 'temperature_2m' ? 'Temperature' : 'Weather Condition'} in ${currentCity}</h2>`;
         contentHtml += '<ul>';
         data[parameter].forEach((value, index) => {
             const dateTime = new Date(data.time[index]).toLocaleString();
@@ -48,7 +73,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function convertCelsiusToFahrenheit(celsius) {
-        return Math.round(celsius * 9/5 + 32);
+        return Math.round(celsius * 9 / 5 + 32);
     }
 
     function getWeatherIcon(code) {
@@ -86,6 +111,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Initial load
-    fetchWeatherData('temperature_2m');
+    fetchWeatherData(currentLatitude, currentLongitude, 'temperature_2m');
 });
 
