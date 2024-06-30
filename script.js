@@ -1,3 +1,4 @@
+
 document.addEventListener('DOMContentLoaded', () => {
     const content = document.getElementById('content');
     const temperatureLink = document.getElementById('temperature-link');
@@ -5,7 +6,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const toggleThemeButton = document.getElementById('toggle-theme');
     const searchButton = document.getElementById('search-button');
     const cityInput = document.getElementById('city-input');
-    const loadingIndicator = document.getElementById('loading-indicator'); // Add this line
+    const loadingIndicator = document.getElementById('loading-indicator');
+    const geolocationLoadingIndicator = document.getElementById('geolocation-loading-indicator');
 
     let currentCity = "Your Location";
     let currentLatitude;
@@ -33,7 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function fetchCoordinates(city) {
         const apiUrl = `https://api.open-meteo.com/v1/forecast?latitude=35.6895&longitude=139.6917&current_weather=true`;
 
-        showLoading(); // Show loading indicator
+        showLoading();
         fetch(apiUrl)
             .then(response => response.json())
             .then(data => {
@@ -46,13 +48,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.error('Error fetching coordinates:', error);
                 content.innerHTML = '<p>Error fetching coordinates.</p>';
             })
-            .finally(hideLoading); // Hide loading indicator
+            .finally(hideLoading);
     }
 
     function fetchWeatherData(latitude, longitude, parameter) {
         const apiUrl = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&hourly=${parameter}`;
 
-        showLoading(); // Show loading indicator
+        showLoading();
         fetch(apiUrl)
             .then(response => response.json())
             .then(data => {
@@ -62,7 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.error('Error fetching data:', error);
                 content.innerHTML = '<p>Error fetching data.</p>';
             })
-            .finally(hideLoading); // Hide loading indicator
+            .finally(hideLoading);
     }
 
     function displayData(data, parameter) {
@@ -116,19 +118,29 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function showLoading() {
-        loadingIndicator.style.display = 'block'; // Show loading indicator
+        loadingIndicator.style.display = 'block';
     }
 
     function hideLoading() {
-        loadingIndicator.style.display = 'none'; // Hide loading indicator
+        loadingIndicator.style.display = 'none';
+    }
+
+    function showGeolocationLoading() {
+        geolocationLoadingIndicator.style.display = 'block';
+    }
+
+    function hideGeolocationLoading() {
+        geolocationLoadingIndicator.style.display = 'none';
     }
 
     // Initial load using geolocation
     if (navigator.geolocation) {
+        showGeolocationLoading();
         navigator.geolocation.getCurrentPosition((position) => {
             currentLatitude = position.coords.latitude;
             currentLongitude = position.coords.longitude;
             fetchWeatherData(currentLatitude, currentLongitude, 'temperature_2m');
+            hideGeolocationLoading();
         }, (error) => {
             console.error('Error getting geolocation:', error);
             content.innerHTML = '<p>Error getting geolocation. Defaulting to Roseville, CA.</p>';
@@ -136,6 +148,7 @@ document.addEventListener('DOMContentLoaded', () => {
             currentLatitude = 38.7521;
             currentLongitude = -121.2880;
             fetchWeatherData(currentLatitude, currentLongitude, 'temperature_2m');
+            hideGeolocationLoading();
         });
     } else {
         console.error('Geolocation not supported');
