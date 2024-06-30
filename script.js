@@ -1,4 +1,3 @@
-
 document.addEventListener('DOMContentLoaded', () => {
     const content = document.getElementById('content');
     const temperatureLink = document.getElementById('temperature-link');
@@ -13,6 +12,22 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentLatitude;
     let currentLongitude;
 
+    // Function to toggle theme and save preference to localStorage
+    function toggleTheme() {
+        document.body.classList.toggle('night-mode');
+        if (document.body.classList.contains('night-mode')) {
+            localStorage.setItem('theme', 'night-mode');
+        } else {
+            localStorage.setItem('theme', 'day-mode');
+        }
+    }
+
+    // Retrieve and apply theme preference from localStorage
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'night-mode') {
+        document.body.classList.add('night-mode');
+    }
+
     temperatureLink.addEventListener('click', () => {
         fetchWeatherData(currentLatitude, currentLongitude, 'temperature_2m');
     });
@@ -21,9 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
         fetchWeatherData(currentLatitude, currentLongitude, 'weathercode');
     });
 
-    toggleThemeButton.addEventListener('click', () => {
-        document.body.classList.toggle('night-mode');
-    });
+    toggleThemeButton.addEventListener('click', toggleTheme);
 
     searchButton.addEventListener('click', () => {
         const city = cityInput.value;
