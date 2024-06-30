@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const toggleThemeButton = document.getElementById('toggle-theme');
     const searchButton = document.getElementById('search-button');
     const cityInput = document.getElementById('city-input');
+    const loadingIndicator = document.getElementById('loading-indicator'); // Add this line
 
     let currentCity = "Your Location";
     let currentLatitude;
@@ -32,6 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function fetchCoordinates(city) {
         const apiUrl = `https://api.open-meteo.com/v1/forecast?latitude=35.6895&longitude=139.6917&current_weather=true`;
 
+        showLoading(); // Show loading indicator
         fetch(apiUrl)
             .then(response => response.json())
             .then(data => {
@@ -43,12 +45,14 @@ document.addEventListener('DOMContentLoaded', () => {
             .catch(error => {
                 console.error('Error fetching coordinates:', error);
                 content.innerHTML = '<p>Error fetching coordinates.</p>';
-            });
+            })
+            .finally(hideLoading); // Hide loading indicator
     }
 
     function fetchWeatherData(latitude, longitude, parameter) {
         const apiUrl = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&hourly=${parameter}`;
 
+        showLoading(); // Show loading indicator
         fetch(apiUrl)
             .then(response => response.json())
             .then(data => {
@@ -57,7 +61,8 @@ document.addEventListener('DOMContentLoaded', () => {
             .catch(error => {
                 console.error('Error fetching data:', error);
                 content.innerHTML = '<p>Error fetching data.</p>';
-            });
+            })
+            .finally(hideLoading); // Hide loading indicator
     }
 
     function displayData(data, parameter) {
@@ -108,6 +113,14 @@ document.addEventListener('DOMContentLoaded', () => {
             99: 'wi wi-thunderstorm'
         };
         return `<i class="${iconMap[code]}"></i>`;
+    }
+
+    function showLoading() {
+        loadingIndicator.style.display = 'block'; // Show loading indicator
+    }
+
+    function hideLoading() {
+        loadingIndicator.style.display = 'none'; // Hide loading indicator
     }
 
     // Initial load using geolocation
