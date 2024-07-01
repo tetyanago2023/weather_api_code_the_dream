@@ -94,11 +94,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Function to display weather data
     function displayData(data, parameter) {
-        let contentHtml = `<h2>${parameter === 'temperature_2m' ? 'Temperature' : 'Weather Condition'} in ${currentCity}</h2>`;
+        let contentHtml = `<h2>${parameter === 'temperature_2m' ?
+            'Temperature forecast for 7 days' 
+            : 'Weather condition forecast for 7 days'} in ${currentCity}</h2>`;
         contentHtml += '<ul>';
         data[parameter].forEach((value, index) => {
             const dateTime = new Date(data.time[index]).toLocaleString(); // Convert time to locale string
-            const displayValue = parameter === 'temperature_2m' ? `${convertCelsiusToFahrenheit(value)}°F` : getWeatherIcon(value); // Convert value based on parameter
+            const displayValue = parameter === 'temperature_2m'
+                ? `${convertCelsiusToFahrenheit(value)}°F`
+                : getWeatherIcon(value); // Convert value based on parameter
             contentHtml += `<li>${dateTime}: ${displayValue}</li>`; // Append data to contentHtml
         });
         contentHtml += '</ul>';
