@@ -1,6 +1,26 @@
 # Weather API Project
 
-This project utilizes the Open-Meteo weather API to display weather data for a specified city.
+## Description
+This Weather Dashboard is a web application that allows users to check the current weather conditions and forecast for a specific location. It utilizes the Open-Meteo API for weather data and the geocode.xyz API for geocoding city names to coordinates.
+
+## Code source and demo
+* Code source: [Weather API Project](https://github.com/tetyanago2023/weather_api_code_the_dream)
+* Demo: [Weather API Project](https://weather-api-code-the-dream.netlify.app/)
+
+
+
+## Features
+* Display current temperature and weather conditions.
+* Toggle between temperature and weather condition views.
+* Support for dark mode theme.
+* Geolocation support to automatically fetch weather for the user's location.
+* Search functionality to look up weather by city name.
+* Responsive design for mobile and desktop devices.
+
+## Technologies Used
+* HTML/CSS/vanilla JavaScript
+* Open-Meteo API
+* geocode.xyz API
 
 ## Project Structure
 
@@ -8,12 +28,6 @@ This project utilizes the Open-Meteo weather API to display weather data for a s
 - **script.js**: JavaScript file responsible for fetching weather data from the Open-Meteo API and dynamically updating the HTML content.
 - **styles.css**: CSS file that styles the HTML elements for a cohesive look and includes night mode functionality.
 - **README.md**: Instructions and details about the project.
-
-## Features
-
-- Displays temperature and weather condition data.
-- Provides a toggle for night mode to improve readability in low-light conditions.
-- Allows users to search for weather data by entering a city name.
 
 ## Setup and Usage
 
@@ -37,28 +51,31 @@ This project utilizes the Open-Meteo weather API to display weather data for a s
 ## Dependencies
 
 - [Open-Meteo API](https://open-meteo.com/)
+- [Geocode API](https://geocode.xyz/api/)
 - [Weather Icons](https://erikflowers.github.io/weather-icons/)
 
 ## How to Use
 
 **Search for Weather Data**
 
-1. Enter a city name in the input field labeled "Enter city name".
-2. Click the "Search" button.
-3. The webpage will update with temperature and weather condition data for the entered city.
+## Usage
+* Upon loading, the application will attempt to fetch weather data for the user's current location using geolocation.
+* Alternatively, users can search for weather by entering a city name in the input field and clicking "Search".
+* Toggle between temperature and weather condition views using the respective links.
+* Click the theme toggle icon-equipped button (`Toggle Theme`) to switch between day and night modes.
 
 **View Temperature**
 
-Click on the "Temperature" link in the navigation bar to view temperature data.
+Click on the "Temperature" link in the navigation bar to view temperature data. Alternatively, users can search for weather by entering a city name in the input field and clicking "Search".
 
 **View Weather Conditions**
 
 Click on the "Condition" link in the navigation bar to view weather conditions represented by icons.
 
-**Toggle Night Mode**
+**Toggle Dark Mode**
 
-Click the "Toggle Night Mode" button to switch between day and night modes for better readability.
+Click the theme toggle icon-equipped button to switch between day and night modes for better readability.
 
 ## License
 
-This project is licensed under the MIT License.
+This project is in the frame of the MIT License (Users of software using an MIT License are permitted to use, copy, modify, merge publish, distribute, sublicense and sell copies of the software).
