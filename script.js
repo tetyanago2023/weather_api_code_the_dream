@@ -1,107 +1,116 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const content = document.getElementById('content');
-    const temperatureLink = document.getElementById('temperature-link');
-    const conditionLink = document.getElementById('condition-link');
-    const toggleThemeButton = document.getElementById('toggle-theme');
-    const themeIcon = document.getElementById('theme-icon');
-    const searchButton = document.getElementById('search-button');
-    const cityInput = document.getElementById('city-input');
-    const loadingIndicator = document.getElementById('loading-indicator');
-    const geolocationLoadingIndicator = document.getElementById('geolocation-loading-indicator');
+    const content = document.getElementById('content'); // Main content area
+    const temperatureLink = document.getElementById('temperature-link'); // Link to fetch temperature data
+    const conditionLink = document.getElementById('condition-link'); // Link to fetch weather condition data
+    const toggleThemeButton = document.getElementById('toggle-theme'); // Button to toggle theme
+    const themeIcon = document.getElementById('theme-icon'); // Icon indicating current theme
+    const searchButton = document.getElementById('search-button'); // Button to initiate city search
+    const cityInput = document.getElementById('city-input'); // Input field for city name
+    const loadingIndicator = document.getElementById('loading-indicator'); // Loading indicator for data fetch
+    const geolocationLoadingIndicator = document.getElementById('geolocation-loading-indicator'); // Loading indicator for geolocation
 
-    let currentCity = localStorage.getItem('city') || "Your Location";
-    let currentLatitude = parseFloat(localStorage.getItem('latitude')) || null;
-    let currentLongitude = parseFloat(localStorage.getItem('longitude')) || null;
+    let currentCity = localStorage.getItem('city') || "Your Location"; // Retrieve saved city from localStorage
+    let currentLatitude = parseFloat(localStorage.getItem('latitude')) || null; // Retrieve saved latitude from localStorage
+    let currentLongitude = parseFloat(localStorage.getItem('longitude')) || null; // Retrieve saved longitude from localStorage
 
     // Function to toggle theme and save preference to localStorage
     function toggleTheme() {
-        const isNightMode = document.body.classList.toggle('night-mode');
-        localStorage.setItem('theme', isNightMode ? 'night-mode' : 'day-mode');
-        themeIcon.className = isNightMode ? 'wi wi-day-sunny' : 'wi wi-night-clear';
+        const isNightMode = document.body.classList.toggle('night-mode'); // Toggle night-mode class on body
+        localStorage.setItem('theme', isNightMode ? 'night-mode' : 'day-mode'); // Save theme preference to localStorage
+        themeIcon.className = isNightMode ? 'wi wi-day-sunny' : 'wi wi-night-clear'; // Update theme icon
     }
 
     // Retrieve and apply theme preference from localStorage
     const savedTheme = localStorage.getItem('theme');
     if (savedTheme === 'night-mode') {
-        document.body.classList.add('night-mode');
-        themeIcon.className = 'wi wi-day-sunny';
+        document.body.classList.add('night-mode'); // Apply night-mode if saved in localStorage
+        themeIcon.className = 'wi wi-day-sunny'; // Set icon to day-sunny
     }
 
+    // Event listener to fetch temperature data
     temperatureLink.addEventListener('click', () => {
         fetchWeatherData(currentLatitude, currentLongitude, 'temperature_2m');
     });
 
+    // Event listener to fetch weather condition data
     conditionLink.addEventListener('click', () => {
         fetchWeatherData(currentLatitude, currentLongitude, 'weathercode');
     });
 
+    // Event listener to toggle theme
     toggleThemeButton.addEventListener('click', toggleTheme);
 
+    // Event listener to search for a city's coordinates
     searchButton.addEventListener('click', () => {
-        const city = cityInput.value;
+        const city = cityInput.value; // Get city name from input field
         if (city) {
-            fetchCoordinates(city);
+            fetchCoordinates(city); // Fetch coordinates if city name is not empty
         }
     });
 
+    // Function to fetch coordinates of a city
     function fetchCoordinates(city) {
-        const apiUrl = `https://geocode.xyz/${city}?json=1`;
+        const apiUrl = `https://geocode.xyz/${city}?json=1`; // API URL to fetch coordinates
 
-        showLoading();
+        showLoading(); // Show loading indicator
         fetch(apiUrl)
             .then(response => response.json())
             .then(data => {
                 if (data.error) {
-                    throw new Error(data.error.description);
+                    throw new Error(data.error.description); // Handle error if present in response
                 }
-                currentCity = city;
-                currentLatitude = parseFloat(data.latt);
-                currentLongitude = parseFloat(data.longt);
-                localStorage.setItem('city', currentCity);
-                localStorage.setItem('latitude', currentLatitude);
-                localStorage.setItem('longitude', currentLongitude);
-                fetchWeatherData(currentLatitude, currentLongitude, 'temperature_2m');
-                cityInput.value = '';
+                currentCity = city; // Set current city
+                currentLatitude = parseFloat(data.latt); // Set current latitude
+                currentLongitude = parseFloat(data.longt); // Set current longitude
+                localStorage.setItem('city', currentCity); // Save city to localStorage
+                localStorage.setItem('latitude', currentLatitude); // Save latitude to localStorage
+                localStorage.setItem('longitude', currentLongitude); // Save longitude to localStorage
+                fetchWeatherData(currentLatitude, currentLongitude, 'temperature_2m'); // Fetch weather data
+                cityInput.value = ''; // Clear input field
             })
             .catch(error => {
                 console.error('Error fetching coordinates:', error);
-                content.innerHTML = '<p>Error fetching coordinates.</p>';
+                content.innerHTML = '<p>Error fetching coordinates.</p>'; // Display error message
             })
-            .finally(hideLoading);
+            .finally(hideLoading); // Hide loading indicator
     }
 
+    // Function to fetch weather data
     function fetchWeatherData(latitude, longitude, parameter) {
-        const apiUrl = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&hourly=${parameter}`;
+        const apiUrl = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&hourly=${parameter}`; // API URL to fetch weather data
 
-        showLoading();
+        showLoading(); // Show loading indicator
         fetch(apiUrl)
             .then(response => response.json())
             .then(data => {
-                displayData(data.hourly, parameter);
+                displayData(data.hourly, parameter); // Display fetched data
             })
             .catch(error => {
                 console.error('Error fetching data:', error);
-                content.innerHTML = '<p>Error fetching data.</p>';
+                content.innerHTML = '<p>Error fetching data.</p>'; // Display error message
             })
-            .finally(hideLoading);
+            .finally(hideLoading); // Hide loading indicator
     }
 
+    // Function to display weather data
     function displayData(data, parameter) {
         let contentHtml = `<h2>${parameter === 'temperature_2m' ? 'Temperature' : 'Weather Condition'} in ${currentCity}</h2>`;
         contentHtml += '<ul>';
         data[parameter].forEach((value, index) => {
-            const dateTime = new Date(data.time[index]).toLocaleString();
-            const displayValue = parameter === 'temperature_2m' ? `${convertCelsiusToFahrenheit(value)}°F` : getWeatherIcon(value);
-            contentHtml += `<li>${dateTime}: ${displayValue}</li>`;
+            const dateTime = new Date(data.time[index]).toLocaleString(); // Convert time to locale string
+            const displayValue = parameter === 'temperature_2m' ? `${convertCelsiusToFahrenheit(value)}°F` : getWeatherIcon(value); // Convert value based on parameter
+            contentHtml += `<li>${dateTime}: ${displayValue}</li>`; // Append data to contentHtml
         });
         contentHtml += '</ul>';
-        content.innerHTML = contentHtml;
+        content.innerHTML = contentHtml; // Set content HTML
     }
 
+    // Function to convert Celsius to Fahrenheit
     function convertCelsiusToFahrenheit(celsius) {
-        return Math.round(celsius * 9 / 5 + 32);
+        return Math.round(celsius * 9 / 5 + 32); // Convert and round to nearest integer
     }
 
+    // Function to get weather icon based on code
     function getWeatherIcon(code) {
         const iconMap = {
             0: 'wi wi-day-sunny',
@@ -133,50 +142,54 @@ document.addEventListener('DOMContentLoaded', () => {
             96: 'wi wi-thunderstorm',
             99: 'wi wi-thunderstorm'
         };
-        return `<i class="${iconMap[code]}"></i>`;
+        return `<i class="${iconMap[code]}"></i>`; // Return icon HTML
     }
 
+    // Function to show loading indicator
     function showLoading() {
-        loadingIndicator.style.display = 'block';
+        loadingIndicator.style.display = 'block'; // Show loading indicator
     }
 
+    // Function to hide loading indicator
     function hideLoading() {
-        loadingIndicator.style.display = 'none';
+        loadingIndicator.style.display = 'none'; // Hide loading indicator
     }
 
+    // Function to show geolocation loading indicator
     function showGeolocationLoading() {
-        geolocationLoadingIndicator.style.display = 'block';
+        geolocationLoadingIndicator.style.display = 'block'; // Show geolocation loading indicator
     }
 
+    // Function to hide geolocation loading indicator
     function hideGeolocationLoading() {
-        geolocationLoadingIndicator.style.display = 'none';
+        geolocationLoadingIndicator.style.display = 'none'; // Hide geolocation loading indicator
     }
 
     // Initial load using saved city or geolocation
     if (currentLatitude && currentLongitude) {
-        fetchWeatherData(currentLatitude, currentLongitude, 'temperature_2m');
+        fetchWeatherData(currentLatitude, currentLongitude, 'temperature_2m'); // Fetch data using saved coordinates
     } else if (navigator.geolocation) {
-        showGeolocationLoading();
+        showGeolocationLoading(); // Show geolocation loading indicator
         navigator.geolocation.getCurrentPosition((position) => {
-            currentLatitude = position.coords.latitude;
-            currentLongitude = position.coords.longitude;
-            fetchWeatherData(currentLatitude, currentLongitude, 'temperature_2m');
-            hideGeolocationLoading();
+            currentLatitude = position.coords.latitude; // Get latitude from geolocation
+            currentLongitude = position.coords.longitude; // Get longitude from geolocation
+            fetchWeatherData(currentLatitude, currentLongitude, 'temperature_2m'); // Fetch weather data
+            hideGeolocationLoading(); // Hide geolocation loading indicator
         }, (error) => {
             console.error('Error getting geolocation:', error);
-            content.innerHTML = '<p>Error getting geolocation. Defaulting to Roseville, CA.</p>';
+            content.innerHTML = '<p>Error getting geolocation. Defaulting to Roseville, CA.</p>'; // Display error message
             // Default to Roseville, CA
             currentLatitude = 38.7521;
             currentLongitude = -121.2880;
-            fetchWeatherData(currentLatitude, currentLongitude, 'temperature_2m');
-            hideGeolocationLoading();
+            fetchWeatherData(currentLatitude, currentLongitude, 'temperature_2m'); // Fetch data for default location
+            hideGeolocationLoading(); // Hide geolocation loading indicator
         });
     } else {
         console.error('Geolocation not supported');
-        content.innerHTML = '<p>Geolocation not supported. Defaulting to Roseville, CA.</p>';
+        content.innerHTML = '<p>Geolocation not supported. Defaulting to Roseville, CA.</p>'; // Display error message
         // Default to Roseville, CA
         currentLatitude = 38.7521;
         currentLongitude = -121.2880;
-        fetchWeatherData(currentLatitude, currentLongitude, 'temperature_2m');
+        fetchWeatherData(currentLatitude, currentLongitude, 'temperature_2m'); // Fetch data for default location
     }
 });
