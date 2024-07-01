@@ -61,6 +61,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 localStorage.setItem('latitude', currentLatitude);
                 localStorage.setItem('longitude', currentLongitude);
                 fetchWeatherData(currentLatitude, currentLongitude, 'temperature_2m');
+                cityInput.value = '';
             })
             .catch(error => {
                 console.error('Error fetching coordinates:', error);
