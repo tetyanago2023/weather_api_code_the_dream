@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const temperatureLink = document.getElementById('temperature-link');
     const conditionLink = document.getElementById('condition-link');
     const toggleThemeButton = document.getElementById('toggle-theme');
+    const themeIcon = document.getElementById('theme-icon');
     const searchButton = document.getElementById('search-button');
     const cityInput = document.getElementById('city-input');
     const loadingIndicator = document.getElementById('loading-indicator');
@@ -14,18 +15,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Function to toggle theme and save preference to localStorage
     function toggleTheme() {
-        document.body.classList.toggle('night-mode');
-        if (document.body.classList.contains('night-mode')) {
-            localStorage.setItem('theme', 'night-mode');
-        } else {
-            localStorage.setItem('theme', 'day-mode');
-        }
+        const isNightMode = document.body.classList.toggle('night-mode');
+        localStorage.setItem('theme', isNightMode ? 'night-mode' : 'day-mode');
+        themeIcon.className = isNightMode ? 'wi wi-day-sunny' : 'wi wi-night-clear';
     }
 
     // Retrieve and apply theme preference from localStorage
     const savedTheme = localStorage.getItem('theme');
     if (savedTheme === 'night-mode') {
         document.body.classList.add('night-mode');
+        themeIcon.className = 'wi wi-day-sunny';
     }
 
     temperatureLink.addEventListener('click', () => {
