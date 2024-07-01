@@ -8,9 +8,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const loadingIndicator = document.getElementById('loading-indicator');
     const geolocationLoadingIndicator = document.getElementById('geolocation-loading-indicator');
 
-    let currentCity = "Your Location";
-    let currentLatitude;
-    let currentLongitude;
+    let currentCity = localStorage.getItem('city') || "Your Location";
+    let currentLatitude = parseFloat(localStorage.getItem('latitude')) || null;
+    let currentLongitude = parseFloat(localStorage.getItem('longitude')) || null;
 
     // Function to toggle theme and save preference to localStorage
     function toggleTheme() {
@@ -46,15 +46,21 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     function fetchCoordinates(city) {
-        const apiUrl = `https://api.open-meteo.com/v1/forecast?latitude=35.6895&longitude=139.6917&current_weather=true`;
+        const apiUrl = `https://geocode.xyz/${city}?json=1`;
 
         showLoading();
         fetch(apiUrl)
             .then(response => response.json())
             .then(data => {
+                if (data.error) {
+                    throw new Error(data.error.description);
+                }
                 currentCity = city;
-                currentLatitude = data.latitude;
-                currentLongitude = data.longitude;
+                currentLatitude = parseFloat(data.latt);
+                currentLongitude = parseFloat(data.longt);
+                localStorage.setItem('city', currentCity);
+                localStorage.setItem('latitude', currentLatitude);
+                localStorage.setItem('longitude', currentLongitude);
                 fetchWeatherData(currentLatitude, currentLongitude, 'temperature_2m');
             })
             .catch(error => {
@@ -146,8 +152,10 @@ document.addEventListener('DOMContentLoaded', () => {
         geolocationLoadingIndicator.style.display = 'none';
     }
 
-    // Initial load using geolocation
-    if (navigator.geolocation) {
+    // Initial load using saved city or geolocation
+    if (currentLatitude && currentLongitude) {
+        fetchWeatherData(currentLatitude, currentLongitude, 'temperature_2m');
+    } else if (navigator.geolocation) {
         showGeolocationLoading();
         navigator.geolocation.getCurrentPosition((position) => {
             currentLatitude = position.coords.latitude;
