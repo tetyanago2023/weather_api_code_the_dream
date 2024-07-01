@@ -4,6 +4,7 @@ body {
     padding: 0;
 }
 
+/* Basic styles */
 header {
     background-color: #117A65;
     color: #B7950B;
@@ -96,4 +97,35 @@ body.night-mode ul li:nth-child(odd) {
 
 body.night-mode ul li:hover {
     background-color: #4b5c6f;
+}
+
+/* Responsive styles */
+@media (max-width: 600px) {
+    nav ul {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    nav ul li {
+        display: block;
+        margin: 0.5em 0;
+    }
+
+    nav ul li a,
+    nav ul li button {
+        display: block;
+        width: 100%;
+        text-align: center;
+        padding: 0.5em 0;
+    }
+
+    header {
+        text-align: center;
+        padding: 0.5em;
+    }
+
+    main {
+        padding: 0.5em;
+    }
 }
