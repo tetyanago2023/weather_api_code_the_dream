@@ -83,6 +83,7 @@ For testing please install listed below packages through npm:
 ```bash
 npm install --save-dev jest
 npm install --save-dev jest-environment-jsdom
+npm install --save-dev babel-jest @babel/core @babel/preset-env
 ```
 The tests are located in the `script.test.js` file. To run the tests, use the following command:
 
