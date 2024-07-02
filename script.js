@@ -77,7 +77,7 @@ document.addEventListener('DOMContentLoaded', () => {
             })
             .catch(error => {
                 console.error('Error fetching coordinates:', error);
-                content.innerHTML = '<p>Error fetching coordinates. Please check the city name correctness you have inserted in the search field.</p>'; // Display error message
+                content.innerHTML = '<p>Error fetching coordinates. Please check the correctness of the city name, which you inserted in the search field.</p>'; // Display error message
             })
             .finally(hideLoading); // Hide loading indicator
     }
