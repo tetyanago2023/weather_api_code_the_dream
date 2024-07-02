@@ -1,5 +1,7 @@
+// Description: This file contains the main logic for the Weather API Project.
+
 // Function to toggle theme and save preference to localStorage
-function toggleTheme() {
+export function toggleTheme() {
     const isNightMode = document.body.classList.toggle('night-mode'); // Toggle night-mode class on body
     localStorage.setItem('theme', isNightMode ? 'night-mode' : 'day-mode'); // Save theme preference to localStorage
     const themeIcon = document.getElementById('theme-icon'); // Icon indicating current theme
@@ -203,7 +205,3 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-// Export toggleTheme function
-module.exports = {
-    toggleTheme
-};

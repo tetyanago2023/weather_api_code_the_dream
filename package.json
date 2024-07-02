@@ -10,10 +10,19 @@
   "author": "Tetyana",
   "license": "ISC",
   "devDependencies": {
+    "@babel/core": "^7.24.7",
+    "@babel/preset-env": "^7.24.7",
+    "babel-jest": "^29.7.0",
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0"
   },
   "jest": {
+    "transform": {
+      "^.+\\.jsx?$": "babel-jest"
+    },
     "testEnvironment": "jsdom"
+  },
+  "babel": {
+    "presets": ["@babel/preset-env"]
   }
 }

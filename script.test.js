@@ -32,5 +32,4 @@ describe('Weather App Tests', () => {
         expect(localStorage.getItem('theme')).toBe('day-mode');
         expect(themeIcon.className).toBe('wi wi-night-clear');
     });
-
 });
