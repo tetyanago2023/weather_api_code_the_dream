@@ -99,11 +99,17 @@ document.addEventListener('DOMContentLoaded', () => {
             .finally(hideLoading); // Hide loading indicator
     }
 
+    // Function to capitalize each word in a string
+    function capitalizeWords(str) {
+        return str.replace(/\b\w/g, char => char.toUpperCase());
+    }
+
     // Function to display weather data
     function displayData(data, parameter) {
+        const capitalizedCity = capitalizeWords(currentCity); // Capitalize city name
         let contentHtml = `<h2>${parameter === 'temperature_2m' ?
             'Temperature forecast for 7 days'
-            : 'Weather condition forecast for 7 days'} in ${currentCity}</h2>`;
+            : 'Weather condition forecast for 7 days'} in ${capitalizedCity}</h2>`;
         contentHtml += '<ul>';
         data[parameter].forEach((value, index) => {
             const dateTime = new Date(data.time[index]).toLocaleString(); // Convert time to locale string
