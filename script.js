@@ -1,9 +1,18 @@
+// Function to toggle theme and save preference to localStorage
+function toggleTheme() {
+    const isNightMode = document.body.classList.toggle('night-mode'); // Toggle night-mode class on body
+    localStorage.setItem('theme', isNightMode ? 'night-mode' : 'day-mode'); // Save theme preference to localStorage
+    const themeIcon = document.getElementById('theme-icon'); // Icon indicating current theme
+    if (themeIcon) {
+        themeIcon.className = isNightMode ? 'wi wi-day-sunny' : 'wi wi-night-clear'; // Update theme icon
+    }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     const content = document.getElementById('content'); // Main content area
     const temperatureLink = document.getElementById('temperature-link'); // Link to fetch temperature data
     const conditionLink = document.getElementById('condition-link'); // Link to fetch weather condition data
     const toggleThemeButton = document.getElementById('toggle-theme'); // Button to toggle theme
-    const themeIcon = document.getElementById('theme-icon'); // Icon indicating current theme
     const searchButton = document.getElementById('search-button'); // Button to initiate city search
     const cityInput = document.getElementById('city-input'); // Input field for city name
     const loadingIndicator = document.getElementById('loading-indicator'); // Loading indicator for data fetch
@@ -13,18 +22,14 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentLatitude = parseFloat(localStorage.getItem('latitude')) || null; // Retrieve saved latitude from localStorage
     let currentLongitude = parseFloat(localStorage.getItem('longitude')) || null; // Retrieve saved longitude from localStorage
 
-    // Function to toggle theme and save preference to localStorage
-    function toggleTheme() {
-        const isNightMode = document.body.classList.toggle('night-mode'); // Toggle night-mode class on body
-        localStorage.setItem('theme', isNightMode ? 'night-mode' : 'day-mode'); // Save theme preference to localStorage
-        themeIcon.className = isNightMode ? 'wi wi-day-sunny' : 'wi wi-night-clear'; // Update theme icon
-    }
-
     // Retrieve and apply theme preference from localStorage
     const savedTheme = localStorage.getItem('theme');
     if (savedTheme === 'night-mode') {
         document.body.classList.add('night-mode'); // Apply night-mode if saved in localStorage
-        themeIcon.className = 'wi wi-day-sunny'; // Set icon to day-sunny
+        const themeIcon = document.getElementById('theme-icon'); // Icon indicating current theme
+        if (themeIcon) {
+            themeIcon.className = 'wi wi-day-sunny'; // Set icon to day-sunny
+        }
     }
 
     // Event listener to fetch temperature data
@@ -95,7 +100,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Function to display weather data
     function displayData(data, parameter) {
         let contentHtml = `<h2>${parameter === 'temperature_2m' ?
-            'Temperature forecast for 7 days' 
+            'Temperature forecast for 7 days'
             : 'Weather condition forecast for 7 days'} in ${currentCity}</h2>`;
         contentHtml += '<ul>';
         data[parameter].forEach((value, index) => {
@@ -197,3 +202,8 @@ document.addEventListener('DOMContentLoaded', () => {
         fetchWeatherData(currentLatitude, currentLongitude, 'temperature_2m'); // Fetch data for default location
     }
 });
+
+// Export toggleTheme function
+module.exports = {
+    toggleTheme
+};

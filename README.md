@@ -76,6 +76,20 @@ Click on the "Condition" link in the navigation bar to view weather conditions r
 
 Click the theme toggle icon-equipped button to switch between day and night modes for better readability.
 
+## Testing
+
+For testing please install listed below packages through npm:
+
+```bash
+npm install --save-dev jest
+npm install --save-dev jest-environment-jsdom
+```
+The tests are located in the `script.test.js` file. To run the tests, use the following command:
+
+```bash
+npm test
+```
+
 ## License
 
 This project is in the frame of the MIT License (Users of software using an MIT License are permitted to use, copy, modify, merge publish, distribute, sublicense and sell copies of the software).
