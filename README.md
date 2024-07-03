@@ -90,7 +90,7 @@ The tests are located in the `script.test.js` file. To run the tests, use the fo
 ```bash
 npm test
 ```
-
+Regarding Punycode deprecation message at the moment of this project development please note that it is a warning message from the Jest library. It is not an error and does not affect the test results. Also, please refer to [Punycode Deprecation](https://nodejs.org/api/punycode.html).
 ## License
 
 This project is in the frame of the MIT License (Users of software using an MIT License are permitted to use, copy, modify, merge publish, distribute, sublicense and sell copies of the software).
