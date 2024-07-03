@@ -1,7 +1,7 @@
 # Weather API Project
 
 ## Description
-This Weather Dashboard is a web application that allows users to check the current weather conditions and forecast for a specific location. It utilizes the Open-Meteo API for weather data and the geocode.xyz API for geocoding city names to coordinates.
+This Weather Dashboard is a web application that allows users to check the current weather conditions and forecast for a specific location. It utilizes the Open-Meteo API for weather data and the geocode.xyz API for geocoding city names to coordinates. Data is fetched from the Open-Meteo API and displayed on the webpage, where users can toggle between temperature and weather condition views. The application supports dark mode and geolocation to automatically fetch weather data. The weather data is displayed in the correct timezone based on the user's location.
 
 ## Code source and demo
 * Code source: [Weather API Project](https://github.com/tetyanago2023/weather_api_code_the_dream)

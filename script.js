@@ -84,13 +84,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Function to fetch weather data
     function fetchWeatherData(latitude, longitude, parameter) {
-        const apiUrl = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&hourly=${parameter}`; // API URL to fetch weather data
+        const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone; // Get user's timezone
+        const apiUrl = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&hourly=${parameter}&timezone=${userTimeZone}`; // API URL to fetch weather data
 
         showLoading(); // Show loading indicator
         fetch(apiUrl)
             .then(response => response.json())
             .then(data => {
-                displayData(data.hourly, parameter); // Display fetched data
+                displayData(data.hourly, parameter, userTimeZone); // Display fetched data
             })
             .catch(error => {
                 console.error('Error fetching data:', error);
@@ -105,14 +106,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Function to display weather data
-    function displayData(data, parameter) {
+    function displayData(data, parameter, userTimeZone) {
         const capitalizedCity = capitalizeWords(currentCity); // Capitalize city name
         let contentHtml = `<h2>${parameter === 'temperature_2m' ?
             'Temperature forecast for 7 days'
             : 'Weather condition forecast for 7 days'} in ${capitalizedCity}</h2>`;
         contentHtml += '<ul>';
         data[parameter].forEach((value, index) => {
-            const dateTime = new Date(data.time[index]).toLocaleString(); // Convert time to locale string
+            const dateTime = new Date(data.time[index]).toLocaleString('en-US', { timeZone: userTimeZone }); // Convert time to locale string with the correct timezone
             const displayValue = parameter === 'temperature_2m'
                 ? `${convertCelsiusToFahrenheit(value)}°F`
                 : getWeatherIcon(value); // Convert value based on parameter
@@ -194,8 +195,8 @@ document.addEventListener('DOMContentLoaded', () => {
             hideGeolocationLoading(); // Hide geolocation loading indicator
         }, (error) => {
             console.error('Error getting geolocation:', error);
-            content.innerHTML = '<p>Error getting geolocation. Defaulting to Roseville, CA.</p>'; // Display error message
-            // Default to Roseville, CA
+            content.innerHTML = '<p>Error getting geolocation. Defaulting to Roseville, CA, USA.</p>'; // Display error message
+            // Default to Roseville, CA, USA
             currentLatitude = 38.7521;
             currentLongitude = -121.2880;
             fetchWeatherData(currentLatitude, currentLongitude, 'temperature_2m'); // Fetch data for default location
@@ -203,11 +204,10 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     } else {
         console.error('Geolocation not supported');
-        content.innerHTML = '<p>Geolocation not supported. Defaulting to Roseville, CA.</p>'; // Display error message
-        // Default to Roseville, CA
+        content.innerHTML = '<p>Geolocation not supported. Defaulting to Roseville, CA, USA.</p>'; // Display error message
+        // Default to Roseville, CA, USA
         currentLatitude = 38.7521;
         currentLongitude = -121.2880;
         fetchWeatherData(currentLatitude, currentLongitude, 'temperature_2m'); // Fetch data for default location
     }
 });
-
