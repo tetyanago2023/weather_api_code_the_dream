@@ -18,7 +18,7 @@ This Weather Dashboard is a web application that allows users to check the curre
 * Responsive design for mobile and desktop devices.
 
 ## Technologies Used
-* HTML/CSS/vanilla JavaScript
+* HTML/CSS/vanilla JavaScript/Jest/ES6
 * Open-Meteo API
 * geocode.xyz API
 
@@ -39,6 +39,7 @@ This Weather Dashboard is a web application that allows users to check the curre
 2. Navigate to the project directory:
     ```bash
     cd weather_api_code_the_dream
+    npm install
     ```
 
 3. Open the project in your IDE.
@@ -70,7 +71,7 @@ Click on the "Temperature" link in the navigation bar to view temperature data. 
 
 **View Weather Conditions**
 
-Click on the "Condition" link in the navigation bar to view weather conditions represented by icons.
+Click on the "Condition" link in the navigation bar to view weather conditions represented by icons. Alternatively, users can search for weather condition by entering a city name in the input field and clicking "Search".
 
 **Toggle Dark Mode**
 
@@ -81,9 +82,7 @@ Click the theme toggle icon-equipped button to switch between day and night mode
 For testing please install listed below packages through npm:
 
 ```bash
-npm install --save-dev jest
-npm install --save-dev jest-environment-jsdom
-npm install --save-dev babel-jest @babel/core @babel/preset-env
+npm install
 ```
 The tests are located in the `script.test.js` file. To run the tests, use the following command:
 
