@@ -67,11 +67,11 @@ This Weather Dashboard is a web application that allows users to check the curre
 
 **View Temperature**
 
-Click on the "Temperature" link in the navigation bar to view temperature data. Alternatively, users can search for weather by entering a city name in the input field and clicking "Search".
+Click on the "Temperature" link in the navigation bar to view temperature data. Alternatively, users can search for weather by entering a city name in the input field and clicking "Search". Also, users can press the "Enter" key to initiate the city search.
 
 **View Weather Conditions**
 
-Click on the "Condition" link in the navigation bar to view weather conditions represented by icons. Alternatively, users can search for weather condition by entering a city name in the input field and clicking "Search".
+Click on the "Condition" link in the navigation bar to view weather conditions represented by icons. Alternatively, users can search for weather condition by entering a city name in the input field and clicking "Search". Also, users can press the "Enter" key to initiate the city search.
 
 **Toggle Dark Mode**
 

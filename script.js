@@ -49,11 +49,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Event listener to search for a city's coordinates
     searchButton.addEventListener('click', () => {
+        searchCity();
+    });
+
+    // Event listener to search for a city's coordinates when pressing "Enter" key
+    cityInput.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter') {
+            searchCity();
+        }
+    });
+
+    // Function to search for a city's coordinates
+    function searchCity() {
         const city = cityInput.value; // Get city name from input field
         if (city) {
             fetchCoordinates(city); // Fetch coordinates if city name is not empty
         }
-    });
+    }
 
     // Function to fetch coordinates of a city
     function fetchCoordinates(city) {
